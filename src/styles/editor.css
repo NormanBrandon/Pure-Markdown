@@ -1,0 +1,29 @@
+#editor {
+  width: 100%;
+  height: 100%;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border: none;
+  outline: none;
+  resize: none;
+  padding: 24px;
+  font-family: 'SF Mono', 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+  font-size: 14px;
+  line-height: 1.7;
+  tab-size: 2;
+  caret-color: var(--accent);
+}
+
+#editor::placeholder {
+  color: var(--text-muted);
+}
+
+#editor::selection {
+  background: rgba(37, 99, 235, 0.2);
+}
+
+@media (prefers-color-scheme: dark) {
+  #editor::selection {
+    background: rgba(137, 180, 250, 0.25);
+  }
+}

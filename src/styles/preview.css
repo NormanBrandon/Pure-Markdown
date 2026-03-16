@@ -1,0 +1,131 @@
+#preview {
+  color: var(--text-primary);
+  line-height: 1.7;
+  max-width: 800px;
+}
+
+#preview h1, #preview h2, #preview h3,
+#preview h4, #preview h5, #preview h6 {
+  color: var(--text-primary);
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+#preview h1 { font-size: 2em; border-bottom: 1px solid var(--border); padding-bottom: 0.3em; }
+#preview h2 { font-size: 1.5em; border-bottom: 1px solid var(--border); padding-bottom: 0.3em; }
+#preview h3 { font-size: 1.25em; }
+#preview h4 { font-size: 1em; }
+
+#preview p {
+  margin-bottom: 1em;
+}
+
+#preview a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+#preview a:hover {
+  text-decoration: underline;
+}
+
+#preview strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+#preview em {
+  font-style: italic;
+}
+
+#preview blockquote {
+  border-left: 3px solid var(--accent);
+  padding: 0.5em 1em;
+  margin: 1em 0;
+  color: var(--text-secondary);
+  background: var(--bg-secondary);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+#preview code {
+  background: var(--bg-surface);
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-family: 'SF Mono', 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.9em;
+}
+
+#preview pre {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  overflow-x: auto;
+  margin: 1em 0;
+}
+
+#preview pre code {
+  background: none;
+  padding: 0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+#preview ul, #preview ol {
+  margin: 1em 0;
+  padding-left: 2em;
+}
+
+#preview li {
+  margin-bottom: 0.3em;
+}
+
+#preview li > ul, #preview li > ol {
+  margin: 0.3em 0;
+}
+
+#preview hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 2em 0;
+}
+
+#preview table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+}
+
+#preview th, #preview td {
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  text-align: left;
+}
+
+#preview th {
+  background: var(--bg-surface);
+  font-weight: 600;
+}
+
+#preview tr:nth-child(even) {
+  background: var(--bg-secondary);
+}
+
+#preview img {
+  max-width: 100%;
+  border-radius: var(--radius);
+  margin: 1em 0;
+}
+
+#preview input[type="checkbox"] {
+  margin-right: 6px;
+}
+
+/* Empty state */
+#preview:empty::before {
+  content: 'Preview will appear here...';
+  color: var(--text-muted);
+  font-style: italic;
+}
