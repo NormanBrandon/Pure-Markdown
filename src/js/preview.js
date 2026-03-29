@@ -2,6 +2,11 @@ import AppState from './state.js';
 
 const previewEl = () => document.getElementById('preview');
 
+// Register KaTeX extension for math rendering ($...$ and $$...$$)
+if (typeof marked !== 'undefined' && typeof markedKatex !== 'undefined') {
+  marked.use(markedKatex({ nonStandard: true, throwOnError: false }));
+}
+
 function resolveImageSrc(href) {
   // Already a URL (http, https, data URI) — leave as-is
   if (/^(https?:|data:)/i.test(href)) return href;

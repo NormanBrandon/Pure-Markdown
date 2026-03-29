@@ -1,8 +1,16 @@
 use serde_json;
 use std::fs;
+use std::sync::Mutex;
 use tauri::Emitter;
 use tauri::Manager;
 use tauri_plugin_cli::CliExt;
+
+struct InitialFile(Mutex<Option<String>>);
+
+#[tauri::command]
+fn get_initial_file(state: tauri::State<'_, InitialFile>) -> Option<String> {
+    state.0.lock().unwrap().take()
+}
 
 #[tauri::command]
 fn get_recent_files(app: tauri::AppHandle) -> Vec<String> {
@@ -52,19 +60,22 @@ pub fn run() {
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_cli::init())
+        .manage(InitialFile(Mutex::new(None)))
         .invoke_handler(tauri::generate_handler![
             get_recent_files,
             save_recent_files,
             get_session,
-            save_session
+            save_session,
+            get_initial_file
         ])
         .setup(|app| {
-            // Check CLI args for a file path
+            // Check CLI args for a file path — store it for the frontend to pick up
             if let Ok(matches) = app.cli().matches() {
                 if let Some(file_arg) = matches.args.get("file") {
                     if let Some(path_str) = file_arg.value.as_str() {
                         if !path_str.is_empty() {
-                            let _ = app.emit("open-file", path_str.to_string());
+                            let state = app.state::<InitialFile>();
+                            *state.0.lock().unwrap() = Some(path_str.to_string());
                         }
                     }
                 }
@@ -78,7 +89,16 @@ pub fn run() {
             if let tauri::RunEvent::Opened { urls } = event {
                 for url in urls {
                     if let Ok(path) = url.to_file_path() {
-                        let _ = app.emit("open-file", path.to_string_lossy().to_string());
+                        let path_str = path.to_string_lossy().to_string();
+                        // Store for frontend to pick up (handles cold start race condition)
+                        if let Some(state) = app.try_state::<InitialFile>() {
+                            let mut initial = state.0.lock().unwrap();
+                            if initial.is_none() {
+                                *initial = Some(path_str.clone());
+                            }
+                        }
+                        // Also emit event (works when frontend listener is already registered)
+                        let _ = app.emit("open-file", path_str);
                     }
                 }
             }

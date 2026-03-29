@@ -3,6 +3,7 @@ import { openFile, createNew, saveFile, closeTab, loadRecent, saveSession, resto
 import { initEditor } from './editor.js';
 
 const { listen } = window.__TAURI__.event;
+const { invoke } = window.__TAURI__.core;
 
 async function init() {
   // Initialize editor (input handlers, splitter)
@@ -14,22 +15,19 @@ async function init() {
   // Restore previous session (Sublime-style)
   const restored = await restoreSession();
 
-  // Listen for file-open events (macOS Finder double-click, CLI args)
+  // Listen for file-open events (macOS Finder double-click while app is running)
   await listen('open-file', (event) => {
     openFile(event.payload);
   });
 
-  // Check CLI arguments
+  // Check if a file was passed at launch (CLI arg or file association on cold start)
   try {
-    const cli = window.__TAURI__.cli;
-    if (cli) {
-      const matches = await cli.getMatches();
-      if (matches.args.file && matches.args.file.value) {
-        await openFile(matches.args.file.value);
-      }
+    const initialFile = await invoke('get_initial_file');
+    if (initialFile) {
+      await openFile(initialFile);
     }
   } catch (e) {
-    // No CLI args, that's fine
+    // No initial file, that's fine
   }
 
   // If no tabs were opened (no session, no CLI), create an empty one

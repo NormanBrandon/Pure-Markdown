@@ -1,6 +1,6 @@
 import AppState from './state.js';
 import { renderPreview } from './preview.js';
-import { saveFile } from './fileops.js';
+import { saveFile, saveSession } from './fileops.js';
 import { renderTabs } from './tabs.js';
 
 const AUTO_SAVE_DELAY = 2000;
@@ -115,31 +115,38 @@ function initSplitter() {
   });
 }
 
-function initViewToggles() {
+export function setView(mode) {
   const workspace = document.getElementById('workspace');
   const btnEditor = document.getElementById('btn-view-editor');
   const btnSplit = document.getElementById('btn-view-split');
   const btnPreview = document.getElementById('btn-view-preview');
 
-  function setView(mode) {
-    workspace.classList.remove('view-editor-only', 'view-preview-only');
-    btnEditor.classList.remove('active');
-    btnSplit.classList.remove('active');
-    btnPreview.classList.remove('active');
+  workspace.classList.remove('view-editor-only', 'view-preview-only');
+  btnEditor.classList.remove('active');
+  btnSplit.classList.remove('active');
+  btnPreview.classList.remove('active');
 
-    if (mode === 'editor') {
-      workspace.classList.add('view-editor-only');
-      btnEditor.classList.add('active');
-    } else if (mode === 'preview') {
-      workspace.classList.add('view-preview-only');
-      btnPreview.classList.add('active');
-    } else {
-      // Reset pane sizes to 50/50 when returning to split view
-      document.getElementById('editor-pane').style.flex = '';
-      document.getElementById('preview-pane').style.flex = '';
-      btnSplit.classList.add('active');
-    }
+  if (mode === 'editor') {
+    workspace.classList.add('view-editor-only');
+    btnEditor.classList.add('active');
+  } else if (mode === 'preview') {
+    workspace.classList.add('view-preview-only');
+    btnPreview.classList.add('active');
+  } else {
+    // Reset pane sizes to 50/50 when returning to split view
+    document.getElementById('editor-pane').style.flex = '';
+    document.getElementById('preview-pane').style.flex = '';
+    btnSplit.classList.add('active');
   }
+
+  AppState.viewMode = mode;
+  saveSession();
+}
+
+function initViewToggles() {
+  const btnEditor = document.getElementById('btn-view-editor');
+  const btnSplit = document.getElementById('btn-view-split');
+  const btnPreview = document.getElementById('btn-view-preview');
 
   btnEditor.addEventListener('click', () => setView('editor'));
   btnSplit.addEventListener('click', () => setView('split'));

@@ -7,7 +7,9 @@
     "tauri": "tauri"
   },
   "devDependencies": {
-    "@tauri-apps/cli": "^2"
+    "@tauri-apps/cli": "^2",
+    "katex": "^0.16.44",
+    "marked-katex-extension": "^5.1.7"
   },
   "dependencies": {
     "@tauri-apps/api": "^2",
@@ -16,5 +18,18 @@
     "@tauri-apps/plugin-fs": "^2",
     "highlight.js": "^11.11.1",
     "marked": "^17.0.4"
-  }
+  },
+  "description": "A simple, fast, cross-platform markdown editor and viewer built with [Tauri](https://tauri.app/) (Rust + HTML/CSS/JS).",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NormanBrandon/Pure-Markdown.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NormanBrandon/Pure-Markdown/issues"
+  },
+  "homepage": "https://github.com/NormanBrandon/Pure-Markdown#readme"
 }

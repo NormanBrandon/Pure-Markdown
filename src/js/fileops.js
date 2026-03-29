@@ -2,6 +2,7 @@ import AppState from './state.js';
 import { renderTabs, switchToTab } from './tabs.js';
 import { renderPreview } from './preview.js';
 import { renderRecent } from './sidebar.js';
+import { setView } from './editor.js';
 
 const { invoke } = window.__TAURI__.core;
 const { readTextFile, writeTextFile } = window.__TAURI__.fs;
@@ -35,6 +36,12 @@ export async function openFile(filePath) {
     content = await readTextFile(filePath);
   } catch (e) {
     console.error('Failed to read file:', e);
+    await ask(`The file "${getFileName(filePath)}" no longer exists or cannot be read.`, {
+      title: 'File Not Found',
+      kind: 'error',
+      okLabel: 'OK'
+    });
+    removeFromRecent(filePath);
     return;
   }
 
@@ -55,7 +62,15 @@ export async function openFile(filePath) {
 }
 
 export function createNew() {
-  const num = AppState.nextUntitledNum++;
+  // Find the lowest available Untitled number
+  const usedNums = new Set(
+    AppState.tabs
+      .filter(t => !t.filePath && /^Untitled-(\d+)\.md$/.test(t.fileName))
+      .map(t => parseInt(t.fileName.match(/^Untitled-(\d+)\.md$/)[1]))
+  );
+  let num = 1;
+  while (usedNums.has(num)) num++;
+
   const tab = {
     id: Date.now().toString() + Math.random().toString(36).slice(2, 6),
     filePath: null,
@@ -190,7 +205,7 @@ export async function saveSession() {
       isDirty: t.isDirty
     })),
     activeTabId: AppState.activeTabId,
-    nextUntitledNum: AppState.nextUntitledNum
+    viewMode: AppState.viewMode
   };
 
   try {
@@ -210,7 +225,10 @@ export async function restoreSession() {
 
     AppState.tabs = session.tabs;
     AppState.activeTabId = session.activeTabId;
-    AppState.nextUntitledNum = session.nextUntitledNum || 1;
+    // Restore view mode (editor, split, or preview)
+    if (session.viewMode) {
+      setView(session.viewMode);
+    }
 
     // Re-read content for tabs that have a filePath (file may have changed externally)
     for (const tab of AppState.tabs) {
