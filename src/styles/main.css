@@ -2,6 +2,7 @@
   --radius: 6px;
   --sidebar-width: 220px;
   --tab-height: 40px;
+  --editor-font-size: 14px;
 }
 
 /* Light theme (default) */
@@ -70,6 +71,56 @@ html, body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  transition: width 0.2s ease, min-width 0.2s ease, opacity 0.2s ease;
+}
+
+#sidebar.collapsed {
+  width: 0;
+  min-width: 0;
+  opacity: 0;
+  border-right: none;
+  pointer-events: none;
+}
+
+/* Toggle buttons */
+.sidebar-toggle-show {
+  display: none;
+  background: none;
+  border: none;
+  border-right: 1px solid var(--border);
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0 8px;
+  line-height: 0;
+  transition: color 0.15s, background 0.15s;
+}
+
+.sidebar-toggle-show:hover {
+  color: var(--text-primary);
+  background: var(--bg-surface);
+}
+
+.sidebar-toggle-show.visible {
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-toggle-hide {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 3px;
+  line-height: 0;
+  flex-shrink: 0;
+  transition: color 0.15s, background 0.15s;
+}
+
+.sidebar-toggle-hide:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
 }
 
 .sidebar-header {

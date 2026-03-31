@@ -2,6 +2,7 @@
   color: var(--text-primary);
   line-height: 1.7;
   max-width: 800px;
+  margin: 0 auto;
 }
 
 #preview h1, #preview h2, #preview h3,

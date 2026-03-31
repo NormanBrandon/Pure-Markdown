@@ -3,6 +3,7 @@ use std::fs;
 use std::sync::Mutex;
 use tauri::Emitter;
 use tauri::Manager;
+use tauri::menu::{AboutMetadata, MenuBuilder, MenuItemBuilder, PredefinedMenuItem, SubmenuBuilder};
 use tauri_plugin_cli::CliExt;
 
 struct InitialFile(Mutex<Option<String>>);
@@ -69,6 +70,83 @@ pub fn run() {
             get_initial_file
         ])
         .setup(|app| {
+            // --- Build native menu bar ---
+            let app_menu = SubmenuBuilder::new(app, "PureMarkdown")
+                .item(&PredefinedMenuItem::about(app, Some("About Pure Markdown"), Some(AboutMetadata::default()))?)
+                .separator()
+                .item(&PredefinedMenuItem::services(app, None)?)
+                .separator()
+                .item(&PredefinedMenuItem::hide(app, None)?)
+                .item(&PredefinedMenuItem::hide_others(app, None)?)
+                .item(&PredefinedMenuItem::show_all(app, None)?)
+                .separator()
+                .item(&PredefinedMenuItem::quit(app, None)?)
+                .build()?;
+
+            let file_menu = SubmenuBuilder::new(app, "File")
+                .item(&MenuItemBuilder::new("New File").accelerator("CmdOrCtrl+N").id("new").build(app)?)
+                .item(&MenuItemBuilder::new("Open...").accelerator("CmdOrCtrl+O").id("open").build(app)?)
+                .separator()
+                .item(&MenuItemBuilder::new("Save").accelerator("CmdOrCtrl+S").id("save").build(app)?)
+                .separator()
+                .item(&MenuItemBuilder::new("Close Tab").accelerator("CmdOrCtrl+W").id("close-tab").build(app)?)
+                .build()?;
+
+            let edit_menu = SubmenuBuilder::new(app, "Edit")
+                .item(&MenuItemBuilder::new("Undo").accelerator("CmdOrCtrl+Z").id("undo").build(app)?)
+                .item(&MenuItemBuilder::new("Redo").accelerator("CmdOrCtrl+Y").id("redo").build(app)?)
+                .separator()
+                .item(&PredefinedMenuItem::cut(app, None)?)
+                .item(&PredefinedMenuItem::copy(app, None)?)
+                .item(&PredefinedMenuItem::paste(app, None)?)
+                .item(&PredefinedMenuItem::select_all(app, None)?)
+                .separator()
+                .item(&MenuItemBuilder::new("Bold").accelerator("CmdOrCtrl+B").id("bold").build(app)?)
+                .item(&MenuItemBuilder::new("Italic").accelerator("CmdOrCtrl+I").id("italic").build(app)?)
+                .item(&MenuItemBuilder::new("Inline Code").accelerator("CmdOrCtrl+E").id("inline-code").build(app)?)
+                .item(&MenuItemBuilder::new("Code Block").accelerator("CmdOrCtrl+Shift+E").id("code-block").build(app)?)
+                .item(&MenuItemBuilder::new("Insert Link").accelerator("CmdOrCtrl+K").id("link").build(app)?)
+                .item(&MenuItemBuilder::new("Insert Image").accelerator("CmdOrCtrl+Shift+K").id("image").build(app)?)
+                .separator()
+                .item(&MenuItemBuilder::new("Select Line").accelerator("CmdOrCtrl+L").id("select-line").build(app)?)
+                .item(&MenuItemBuilder::new("Duplicate Line").accelerator("CmdOrCtrl+D").id("duplicate-line").build(app)?)
+                .item(&MenuItemBuilder::new("Move Line Up").accelerator("CmdOrCtrl+Shift+Up").id("move-line-up").build(app)?)
+                .item(&MenuItemBuilder::new("Move Line Down").accelerator("CmdOrCtrl+Shift+Down").id("move-line-down").build(app)?)
+                .build()?;
+
+            let view_menu = SubmenuBuilder::new(app, "View")
+                .item(&MenuItemBuilder::new("Toggle Sidebar").accelerator("CmdOrCtrl+\\").id("toggle-sidebar").build(app)?)
+                .separator()
+                .item(&MenuItemBuilder::new("Editor Only").accelerator("CmdOrCtrl+1").id("view-editor").build(app)?)
+                .item(&MenuItemBuilder::new("Split View").accelerator("CmdOrCtrl+2").id("view-split").build(app)?)
+                .item(&MenuItemBuilder::new("Preview Only").accelerator("CmdOrCtrl+3").id("view-preview").build(app)?)
+                .separator()
+                .item(&MenuItemBuilder::new("Zoom In").accelerator("CmdOrCtrl+=").id("zoom-in").build(app)?)
+                .item(&MenuItemBuilder::new("Zoom Out").accelerator("CmdOrCtrl+-").id("zoom-out").build(app)?)
+                .item(&MenuItemBuilder::new("Reset Zoom").accelerator("CmdOrCtrl+0").id("zoom-reset").build(app)?)
+                .separator()
+                .item(&PredefinedMenuItem::fullscreen(app, None)?)
+                .build()?;
+
+            let help_menu = SubmenuBuilder::new(app, "Help")
+                .item(&MenuItemBuilder::new("Keyboard Shortcuts").id("shortcuts-help").build(app)?)
+                .build()?;
+
+            let menu = MenuBuilder::new(app)
+                .item(&app_menu)
+                .item(&file_menu)
+                .item(&edit_menu)
+                .item(&view_menu)
+                .item(&help_menu)
+                .build()?;
+
+            app.set_menu(menu)?;
+
+            // Forward menu events to the frontend
+            app.on_menu_event(move |app_handle, event| {
+                let _ = app_handle.emit("menu-event", event.id().0.as_str());
+            });
+
             // Check CLI args for a file path — store it for the frontend to pick up
             if let Ok(matches) = app.cli().matches() {
                 if let Some(file_arg) = matches.args.get("file") {

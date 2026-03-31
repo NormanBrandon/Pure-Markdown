@@ -8,7 +8,7 @@
   resize: none;
   padding: 24px;
   font-family: 'SF Mono', 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
-  font-size: 14px;
+  font-size: var(--editor-font-size);
   line-height: 1.7;
   tab-size: 2;
   caret-color: var(--accent);

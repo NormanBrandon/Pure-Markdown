@@ -19,6 +19,9 @@
       <div class="sidebar-header">
         <img src="icon.svg" alt="Pure Markdown" class="sidebar-logo" width="28" height="28" />
         <h2>Pure Markdown</h2>
+        <button id="btn-sidebar-hide" class="sidebar-toggle-hide" title="Hide sidebar (Ctrl+\)">
+          <svg width="16" height="16" viewBox="0 0 16 16"><path d="M10 3l-5 5 5 5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
       </div>
       <div class="sidebar-actions">
         <button id="btn-new" title="New file (Ctrl+N)">+ New</button>
@@ -34,6 +37,9 @@
     <main id="main">
       <!-- Tab bar -->
       <div id="tab-bar">
+        <button id="btn-sidebar-show" class="sidebar-toggle-show" title="Show sidebar (Ctrl+\)">
+          <svg width="16" height="16" viewBox="0 0 16 16"><path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
         <div id="tabs-container"></div>
         <button id="btn-new-tab" title="New tab (Ctrl+N)">+</button>
       </div>

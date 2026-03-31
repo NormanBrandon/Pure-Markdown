@@ -1,44 +1,88 @@
 # Pure Markdown
 
-A simple, fast, cross-platform markdown editor and viewer built with [Tauri](https://tauri.app/) (Rust + HTML/CSS/JS).
+A simple, fast, cross-platform markdown editor built with [Tauri](https://tauri.app/) (Rust + HTML/CSS/JS).
 
 ## Screenshots
 
-| Modo | Vista | Imagen |
+| Mode | View | Image |
 |:---:|:---:|:---:|
-| LightMode | Preview Only | ![Preview Only](screenshots/preview-only.png) |
-| LightMode | Split View | ![Split View](screenshots/split-view.png) |
-| LightMode | Editor Only | ![Editor Only](screenshots/editor-only.png) |
-| DarkMode | Preview Only | ![Preview Only](screenshots/dark-preview-only.png) |
-| DarkMode | Split View | ![Split View](screenshots/dark-split-view.png) |
-| DarkMode | Editor Only | ![Editor Only](screenshots/dark-editor-only.png) |
-
+| Light | Preview Only | ![Preview Only](screenshots/preview-only.png) |
+| Light | Split View | ![Split View](screenshots/split-view.png) |
+| Light | Editor Only | ![Editor Only](screenshots/editor-only.png) |
+| Dark | Preview Only | ![Preview Only](screenshots/dark-preview-only.png) |
+| Dark | Split View | ![Split View](screenshots/dark-split-view.png) |
+| Dark | Editor Only | ![Editor Only](screenshots/dark-editor-only.png) |
 
 ## Features
 
-- Split view: editor on the left, live preview on the right
-- Tab-based interface with `+` button for new files
-- Sidebar with recently opened files
-- Auto-save (2s debounce) for files with a path
-- Draggable splitter between editor and preview
-- Native file dialogs (open/save)
-- Light/dark theme (follows OS preference)
-- Syntax highlighting in code blocks
-- Session persistence (Sublime-style: unsaved tabs survive app restart)
-- Word and character counter
-- File association for `.md` files (double-click to open)
-- Keyboard shortcuts:
-  - `Cmd/Ctrl + N` — New file
-  - `Cmd/Ctrl + O` — Open file
-  - `Cmd/Ctrl + S` — Save
-  - `Cmd/Ctrl + W` — Close tab
+- **Split view** with three modes: editor only, split, and preview only
+- **Tabs** with session persistence -- unsaved tabs and content survive app restarts
+- **Collapsible sidebar** with recent files list
+- **Auto-save** with 2-second debounce for files saved to disk
+- **Syntax highlighting** in code blocks via highlight.js (auto-detection and language hints)
+- **KaTeX math rendering** for inline (`$...$`) and display (`$$...$$`) expressions
+- **Dark/light theme** that follows system preference
+- **Font size zoom** (in/out/reset) with persistence across sessions
+- **Scroll sync** between editor and preview panes
+- **Draggable splitter** between editor and preview
+- **Word and character counter** in the status bar
+- **Native macOS menu bar** with all shortcuts visible
+- **Custom app icon**
+- **File associations** for `.md`, `.markdown`, `.mdown`, and `.mkd`
+- **Relative image resolution** in preview (paths resolve relative to the open file)
+- **CLI support** -- open files by passing a path as an argument
+
+## Keyboard Shortcuts
+
+All shortcuts use `Cmd` on macOS and `Ctrl` on Windows/Linux.
+
+### File Operations
+
+| Shortcut | Action |
+|----------|--------|
+| `Cmd/Ctrl + N` | New file |
+| `Cmd/Ctrl + O` | Open file |
+| `Cmd/Ctrl + S` | Save file |
+| `Cmd/Ctrl + W` | Close tab |
+
+### Editing
+
+| Shortcut | Action |
+|----------|--------|
+| `Cmd/Ctrl + Z` | Undo |
+| `Cmd/Ctrl + Y` or `Cmd/Ctrl + Shift + Z` | Redo |
+| `Cmd/Ctrl + B` | Bold |
+| `Cmd/Ctrl + I` | Italic |
+| `Cmd/Ctrl + E` | Inline code |
+| `Cmd/Ctrl + Shift + E` | Code block |
+| `Cmd/Ctrl + K` | Insert link |
+| `Cmd/Ctrl + Shift + K` | Insert image |
+| `Cmd/Ctrl + L` | Select line |
+| `Cmd/Ctrl + D` | Duplicate line |
+| `Cmd/Ctrl + Shift + Up` | Move line up |
+| `Cmd/Ctrl + Shift + Down` | Move line down |
+| `Tab` | Indent |
+| `Shift + Tab` | Dedent |
+| `Shift + Backspace` | Dedent current line |
+
+### View
+
+| Shortcut | Action |
+|----------|--------|
+| `Cmd/Ctrl + 1` | Editor only |
+| `Cmd/Ctrl + 2` | Split view |
+| `Cmd/Ctrl + 3` | Preview only |
+| `Cmd/Ctrl + \` | Toggle sidebar |
+| `Cmd/Ctrl + =` | Zoom in |
+| `Cmd/Ctrl + -` | Zoom out |
+| `Cmd/Ctrl + 0` | Reset zoom |
 
 ## Requirements
 
 All platforms need:
 
-- **Rust** (stable) — [https://rustup.rs](https://rustup.rs)
-- **Node.js** (LTS) — [https://nodejs.org](https://nodejs.org) or via [nvm](https://github.com/nvm-sh/nvm)
+- **Rust** (stable) -- [https://rustup.rs](https://rustup.rs)
+- **Node.js** (LTS) -- [https://nodejs.org](https://nodejs.org) or via [nvm](https://github.com/nvm-sh/nvm)
 
 ### macOS
 
@@ -71,8 +115,8 @@ sudo pacman -S webkit2gtk-4.1 base-devel curl wget file openssl \
 
 ### Windows
 
-- [Microsoft Visual Studio C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/) — install the "Desktop development with C++" workload
-- [WebView2](https://developer.microsoft.com/en-us/microsoft-edge/webview2/) — pre-installed on Windows 10 (1803+) and Windows 11
+- [Microsoft Visual Studio C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/) -- install the "Desktop development with C++" workload
+- [WebView2](https://developer.microsoft.com/en-us/microsoft-edge/webview2/) -- pre-installed on Windows 10 (1803+) and Windows 11
 
 ## Install Rust and Node.js
 
@@ -181,7 +225,7 @@ PureMarkdown/
 │   │   ├── state.js              # Central app state
 │   │   ├── tabs.js               # Tab management
 │   │   ├── editor.js             # Editor input, auto-save, splitter
-│   │   ├── preview.js            # Markdown rendering (marked.js + highlight.js)
+│   │   ├── preview.js            # Markdown rendering (marked.js + highlight.js + KaTeX)
 │   │   ├── fileops.js            # Open/save/create via Tauri APIs
 │   │   └── sidebar.js            # Recent files list
 │   └── vendor/
