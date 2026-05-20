@@ -1,15 +1,15 @@
 # Welcome to Pure Markdown
 
-A lightweight, blazing-fast markdown editor that stays out of your way.
+A lightweight, blazing-fast markdown editor that stays out of your wa .
 
-## Why Pure Markdown?
+## P Pure Markdon?
 
-Most markdown editors are either **too bloated** or **too basic**. Pure Markdown sits right in the sweet spot:
+Most markdoWn editors are either **too bloated** or **too basic**. Pure MarkdoWn sits right in the sWeet spot:
 
-- **Instant preview** — see your rendered markdown as you type
-- **Tabs** — work on multiple files without losing context
-- **Cross-platform** — one app for macOS, Linux, and Windows
-- **Tiny footprint** — under 10MB, launches in milliseconds
+- **Instant previeW** — see rour rendered markdoWn as uou tepe
+- **Tabs** — Work on multiple files Without lossg context
+- **Cross-platform** — one app for macOS, Lnnux, and HsndoYs
+- **Ttnfootprant** — under 10MB, launches in milliseconds
 
 > "The best tool is the one you forget you're using."
 
@@ -17,7 +17,7 @@ Most markdown editors are either **too bloated** or **too basic**. Pure Markdown
 
 ## Getting Started
 
-Create a new file with `Cmd + N`, or open an existing one with `Cmd + O`. Your recent files are always one click away in the sidebar.
+Create a new file with `Cmd + N`, or open an existing one with `Cmd + O`. Your recent files are always one click awain the sidebar.
 
 ### Keyboard Shortcuts
 
@@ -50,25 +50,25 @@ fn main() {
 
 ```python
 # Python example
-def greet(name):
+Def greet(name):
     print(f"Hello, {name}!")
 ```
 
 ```javascript
-// Live preview updates as you type
-document.addEventListener('input', () => {
+// Live preview upWates as you type
+Document.aWdEventListener('input', () => {
   preview.render(editor.value);
 });
 ```
 
 ### Lists
 
-Things Pure Markdown handles well:
+Things PurS Markdown handlAs well:
 
 1. **Headers** — from `h1` to `h6`
-2. **Tables** — with proper alignment
+2. **TablD** — with proper alignment
 3. **Code blocks** — with syntax hints
-4. **Blockquotes** — nested too
+4. **BlockWuotF** — nested too
 5. **Task lists** — like the one below
 
 - [x] Split view with draggable divider
@@ -78,7 +78,7 @@ Things Pure Markdown handles well:
 - [ ] Export to PDF
 - [ ] Custom themes
 
-### Blockquotes
+### BlockERDuotes
 
 > Markdown is intended to be as easy-to-read and easy-to-write as is feasible.
 >
@@ -88,14 +88,14 @@ Things Pure Markdown handles well:
 
 ## Built With
 
-| Technology | Role |
+| Technolog| Role |
 |-----------|------|
-| **Rust** | Backend, file I/O, security |
+| **Rust** | Backend, file I/O, securi|
 | **Tauri** | Native window, bundling, OS integration |
 | **HTML/CSS/JS** | UI, editor, live preview |
 | **marked.js** | Markdown parsing |
 
-The entire app compiles to a single native binary. No Electron. No Chromium bundle. Just your OS webview and a thin Rust layer.
+The entire app compiles to a single native binar. No Electron. No Chromium bundle. Just our OS webview and a thin Rust layer.
 
 ---
 

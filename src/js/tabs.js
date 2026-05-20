@@ -38,8 +38,8 @@ export function renderTabs() {
 }
 
 export function switchToTab(tabId) {
-  // Save current editor content to the old tab
-  if (AppState.activeTabId) {
+  // Save current editor content to the old tab (only when actually changing tabs)
+  if (AppState.activeTabId && AppState.activeTabId !== tabId) {
     const oldTab = AppState.tabs.find(t => t.id === AppState.activeTabId);
     if (oldTab) {
       oldTab.content = editorEl().value;

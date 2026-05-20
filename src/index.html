@@ -47,6 +47,28 @@
       <!-- Editor + Preview split -->
       <div id="workspace">
         <div id="editor-pane">
+          <!-- Search / Replace panel -->
+          <div id="search-panel" class="hidden">
+            <div class="search-row">
+              <input id="search-input" type="text" placeholder="Find…" autocomplete="off" spellcheck="false" />
+              <span id="search-count"></span>
+              <button id="search-prev" title="Previous match (Shift+Enter)">
+                <svg width="12" height="12" viewBox="0 0 12 12"><path d="M6 9L2 5h8z" fill="currentColor" transform="rotate(180,6,7)"/></svg>
+              </button>
+              <button id="search-next" title="Next match (Enter)">
+                <svg width="12" height="12" viewBox="0 0 12 12"><path d="M6 9L2 5h8z" fill="currentColor"/></svg>
+              </button>
+              <button id="search-close" title="Close (Esc)">
+                <svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </button>
+            </div>
+            <div id="search-replace-row" class="search-row hidden">
+              <input id="replace-input" type="text" placeholder="Replace…" autocomplete="off" spellcheck="false" />
+              <button id="btn-replace-one">Replace</button>
+              <button id="btn-replace-all">Replace all</button>
+            </div>
+          </div>
+          <div id="editor-highlight-overlay" aria-hidden="true"></div>
           <textarea id="editor" spellcheck="false" placeholder="Start writing markdown..."></textarea>
         </div>
         <div id="splitter"></div>
@@ -65,6 +87,12 @@
           <span id="status-char-count">0 chars</span>
         </div>
         <div class="status-right">
+          <div class="font-size-control" title="Font size">
+            <button id="btn-zoom-out" class="font-btn" title="Decrease font size (Ctrl+-)">A−</button>
+            <span id="status-font-size">14px</span>
+            <button id="btn-zoom-in" class="font-btn" title="Increase font size (Ctrl+=)">A+</button>
+          </div>
+          <span class="status-sep">|</span>
           <button id="btn-view-editor" class="view-btn" title="Editor only">
             <svg width="16" height="16" viewBox="0 0 16 16">
               <rect x="1" y="2" width="14" height="12" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/>

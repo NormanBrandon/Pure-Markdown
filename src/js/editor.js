@@ -58,29 +58,37 @@ function getCurrentFontSize() {
   return parseInt(val) || 14;
 }
 
-export function zoomIn() {
-  const size = Math.min(getCurrentFontSize() + FONT_STEP, MAX_FONT_SIZE);
+function _applyFontSize(size) {
   document.documentElement.style.setProperty('--editor-font-size', size + 'px');
   localStorage.setItem('editor-font-size', size);
+  const el = document.getElementById('status-font-size');
+  if (el) el.textContent = size + 'px';
+}
+
+export function zoomIn() {
+  _applyFontSize(Math.min(getCurrentFontSize() + FONT_STEP, MAX_FONT_SIZE));
 }
 
 export function zoomOut() {
-  const size = Math.max(getCurrentFontSize() - FONT_STEP, MIN_FONT_SIZE);
-  document.documentElement.style.setProperty('--editor-font-size', size + 'px');
-  localStorage.setItem('editor-font-size', size);
+  _applyFontSize(Math.max(getCurrentFontSize() - FONT_STEP, MIN_FONT_SIZE));
 }
 
 export function zoomReset() {
-  document.documentElement.style.setProperty('--editor-font-size', '14px');
-  localStorage.setItem('editor-font-size', 14);
+  _applyFontSize(14);
 }
 
 // Restore saved font size on load
 function restoreFontSize() {
   const saved = localStorage.getItem('editor-font-size');
   if (saved) {
-    document.documentElement.style.setProperty('--editor-font-size', saved + 'px');
+    _applyFontSize(parseInt(saved));
   }
+}
+
+// Export pushUndo for use by search/replace module
+export function pushEditorUndo() {
+  const editor = document.getElementById('editor');
+  if (AppState.activeTabId) pushUndo(AppState.activeTabId, editor);
 }
 
 // --- Helpers for text manipulation ---

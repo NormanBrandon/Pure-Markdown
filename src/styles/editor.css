@@ -14,6 +14,31 @@
   caret-color: var(--accent);
 }
 
+#editor-highlight-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow: hidden;
+  pointer-events: none;
+  color: transparent;
+  background: transparent;
+  z-index: 1;
+  user-select: none;
+  margin: 0;
+  border: none;
+}
+
+#editor-highlight-overlay mark {
+  background: rgba(255, 210, 0, 0.35);
+  color: transparent;
+  border-radius: 2px;
+}
+
+#editor-highlight-overlay mark.current-match {
+  background: rgba(255, 150, 0, 0.55);
+}
+
 #editor::placeholder {
   color: var(--text-muted);
 }

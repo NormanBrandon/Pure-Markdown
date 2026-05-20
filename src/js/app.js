@@ -1,6 +1,7 @@
 import AppState from './state.js';
 import { openFile, createNew, saveFile, closeTab, loadRecent, saveSession, restoreSession } from './fileops.js';
-import { initEditor, setView, zoomIn, zoomOut, zoomReset } from './editor.js';
+import { initEditor, setView, zoomIn, zoomOut, zoomReset, pushEditorUndo } from './editor.js';
+import { initSearch, openSearch, openReplace, closeSearch, isSearchOpen, registerPushUndo } from './search.js';
 
 function toggleSidebar(forceState) {
   const sidebar = document.getElementById('sidebar');
@@ -23,6 +24,14 @@ const { invoke } = window.__TAURI__.core;
 async function init() {
   // Initialize editor (input handlers, splitter)
   initEditor();
+
+  // Initialize search/replace
+  initSearch();
+  registerPushUndo(pushEditorUndo);
+
+  // Font size buttons in status bar
+  document.getElementById('btn-zoom-in').addEventListener('click', zoomIn);
+  document.getElementById('btn-zoom-out').addEventListener('click', zoomOut);
 
   // Restore sidebar state
   restoreSidebar();
@@ -65,6 +74,22 @@ async function init() {
   // Global keyboard shortcuts
   document.addEventListener('keydown', (e) => {
     const mod = e.metaKey || e.ctrlKey;
+    // Search (Ctrl/Cmd+F) and Replace (Ctrl/Cmd+R)
+    if (mod && e.key === 'f') {
+      e.preventDefault();
+      openSearch();
+      return;
+    }
+    if (mod && (e.key === 'r' || e.key === 'h')) {
+      e.preventDefault();
+      openReplace();
+      return;
+    }
+    if (e.key === 'Escape' && isSearchOpen()) {
+      e.preventDefault();
+      closeSearch();
+      return;
+    }
     if (mod && e.key === 'o') {
       e.preventDefault();
       openFile();
@@ -130,6 +155,8 @@ async function init() {
       case 'new': createNew(); break;
       case 'open': openFile(); break;
       case 'save': saveFile(AppState.activeTabId); break;
+      case 'find': openSearch(); break;
+      case 'replace': openReplace(); break;
       case 'close-tab': closeTab(AppState.activeTabId); break;
       case 'undo': dispatch('z'); break;
       case 'redo': dispatch('y'); break;
