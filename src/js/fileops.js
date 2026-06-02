@@ -5,8 +5,12 @@ import { renderRecent } from './sidebar.js';
 import { setView } from './editor.js';
 
 const { invoke } = window.__TAURI__.core;
-const { readTextFile, writeTextFile } = window.__TAURI__.fs;
 const { open, save, ask } = window.__TAURI__.dialog;
+
+// File I/O goes through dedicated Rust commands (read_file/write_file) instead of
+// the broad fs plugin, so the webview has no general-purpose filesystem API.
+const readTextFile = (path) => invoke('read_file', { path });
+const writeTextFile = (path, content) => invoke('write_file', { path, content });
 
 function getFileName(filePath) {
   return filePath.split('/').pop().split('\\').pop();
